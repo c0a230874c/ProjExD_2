@@ -37,11 +37,13 @@ def game_over(screen: pg.Surface):
     kk_img_2 = pg.image.load("fig/8.png")
     fonto = pg.font.Font(None, 120)
     txt = fonto.render("Game Over", True, (255, 255, 255))
+    fonto.set_bold(True)
     
     screen.blit(screen_gameover, [0, 0])
-    screen.blit(txt, [WIDTH/3, HEIGHT/2])
-    screen.blit(kk_img_2, [WIDTH/3 - 10, HEIGHT/2])
-    screen.blit(kk_img_2, [WIDTH/3 + 10, HEIGHT/2])
+    txt_rct = [WIDTH/3 - 30, HEIGHT/2 - 20]
+    screen.blit(txt, txt_rct)
+    screen.blit(kk_img_2, [txt_rct[0] - 50, txt_rct[1]])
+    screen.blit(kk_img_2, [txt_rct[0] + 460, txt_rct[1]])
     pg.display.update()
 
 def main():
