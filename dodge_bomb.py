@@ -13,6 +13,20 @@ DELTA = {pg.K_UP:(0, -5),
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 
+def check_bound(rect: pg.Rect) -> tuple[bool, bool]:
+    """
+    引数:こうかとん,バクダンのrect
+    戻り値:真理値タプル(横判定, 縦判定)
+    画面内ならTrue、画面外ならFalse
+    """
+    yoko, tate = True, True
+    if rect.left < 0 or WIDTH < rect.right:
+        yoko = False
+    if rect.top < 0 or HEIGHT < rect.bottom:
+        tate = False
+    return yoko, tate
+
+
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
     screen = pg.display.set_mode((WIDTH, HEIGHT))
@@ -29,7 +43,8 @@ def main():
 
     clock = pg.time.Clock()
     tmr = 0
-    vx = +5, vy = +5  #バクダンの移動量
+    vx = +5
+    vy = +5  #バクダンの移動量
 
     while True:
         for event in pg.event.get():
@@ -54,8 +69,15 @@ def main():
                 sum_mv[1] += tpl[1]  #縦座標
         
         kk_rct.move_ip(sum_mv)
+        if check_bound(kk_rct) != (True, True):
+            kk_rct.move_ip(-sum_mv[0], -sum_mv[1]) #画面外に行かないようにする
         screen.blit(kk_img, kk_rct)
         bb_rct.move_ip(vx, vy)
+        yoko, tate = check_bound(bb_rct)
+        if not yoko:  #バクダンバウンド
+            vx *= -1
+        if not tate:
+            vy *= -1
         screen.blit(bb_img, bb_rct)
         pg.display.update()
         tmr += 1
