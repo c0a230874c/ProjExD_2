@@ -1,15 +1,15 @@
 import os
-import pygame as pg
 import random as ran
 import sys
 import time
+import pygame as pg
 
 
 WIDTH, HEIGHT = 1100, 650
 DELTA = {pg.K_UP:(0, -5), 
          pg.K_DOWN:(0, +5), 
          pg.K_RIGHT:(+5, 0), 
-         pg.K_LEFT:(-5, 0),
+         pg.K_LEFT:(-5, 0), 
          }  # 練習１
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
@@ -48,7 +48,12 @@ def accs(ac, vx, vy) -> list[int,int,int]:
     return ac, vx, vy
 
 
-def large(r):
+def large(r: int) -> int:
+    """
+    バクダンの大きさを変える
+    引数:半径
+    戻り値:半径
+    """
     if r < 12:
         r += 1
     bb_img = pg.Surface((20 * r, 20 * r)) #空のSurface
