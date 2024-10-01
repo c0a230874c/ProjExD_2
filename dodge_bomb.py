@@ -1,6 +1,7 @@
 import os
 import random as ran
 import sys
+import time
 import pygame as pg
 
 
@@ -26,6 +27,22 @@ def check_bound(rect: pg.Rect) -> tuple[bool, bool]:
         tate = False
     return yoko, tate
 
+
+def game_over(screen: pg.Surface):
+    screen_gameover = pg.Surface((WIDTH, HEIGHT))
+    screen_gameover_rct = (0, 0, WIDTH, HEIGHT)
+    pg.draw.rect(screen_gameover, (0, 0, 0), screen_gameover_rct)
+    screen_gameover.set_alpha(160)
+
+    kk_img_2 = pg.image.load("fig/8.png")
+    fonto = pg.font.Font(None, 120)
+    txt = fonto.render("Game Over", True, (255, 255, 255))
+    
+    screen.blit(screen_gameover, [0, 0])
+    screen.blit(txt, [WIDTH/3, HEIGHT/2])
+    screen.blit(kk_img_2, [WIDTH/3 - 10, HEIGHT/2])
+    screen.blit(kk_img_2, [WIDTH/3 + 10, HEIGHT/2])
+    pg.display.update()
 
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
@@ -53,19 +70,13 @@ def main():
         screen.blit(bg_img, [0, 0]) 
 
         if kk_rct.colliderect(bb_rct):  #当たったら終了
+            game_over(screen)
+            time.sleep(5)
             return
 
         key_lst = pg.key.get_pressed()
         sum_mv = [0, 0] #横、縦
-        # if key_lst[pg.K_UP]:
-        #     sum_mv[1] -= 5
-        # if key_lst[pg.K_DOWN]:
-        #     sum_mv[1] += 5
-        # if key_lst[pg.K_LEFT]:
-        #     sum_mv[0] -= 5
-        # if key_lst[pg.K_RIGHT]:
-        #     sum_mv[0] += 5
-
+        
         for key, tpl in DELTA.items():
             if key_lst[key]:
                 sum_mv[0] += tpl[0]  #横座標
