@@ -28,6 +28,31 @@ def check_bound(rect: pg.Rect) -> tuple[bool, bool]:
     return yoko, tate
 
 
+def accs(ac, vx, vy):
+    if ac < 11:
+        ac += 1
+        if vx < 0:
+            ac *= -1
+        vx += ac
+        if vy < 0:
+            ac *= -1
+        vy += ac
+    print(ac, vx, vy)
+    return ac, vx, vy
+
+
+def large(r):
+    if r < 12:
+        r += 1
+    bb_img = pg.Surface((20 * r, 20 * r)) #空のSurface
+    bb_img.set_colorkey((0, 0, 0))
+    pg.draw.circle(bb_img, (255, 0, 0), (10 * r, 10 * r), 10 * r)
+    bb_rct = bb_img.get_rect()
+    bb_rct.center = ran.randint(0, WIDTH), ran.randint(0, HEIGHT)
+    print(r)
+    return r
+
+
 def game_over(screen: pg.Surface):
     screen_gameover = pg.Surface((WIDTH, HEIGHT))
     screen_gameover_rct = (0, 0, WIDTH, HEIGHT)
@@ -49,7 +74,7 @@ def game_over(screen: pg.Surface):
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
     screen = pg.display.set_mode((WIDTH, HEIGHT))
-    bg_img = pg.image.load("fig/pg_bg.jpg")    
+    bg_img = pg.image.load("fig/pg_bg.jpg")   
     kk_img = pg.transform.rotozoom(pg.image.load("fig/3.png"), 0, 0.9)
     kk_rct = kk_img.get_rect()
     kk_rct.center = 300, 200
@@ -62,9 +87,11 @@ def main():
 
     clock = pg.time.Clock()
     tmr = 0
-    vx = +5
-    vy = +5  #バクダンの移動量
-
+    r = 0
+    ac = 0
+    vx = +3
+    vy = +3 #バクダンの移動量
+    
     while True:
         for event in pg.event.get():
             if event.type == pg.QUIT: 
@@ -73,8 +100,13 @@ def main():
 
         if kk_rct.colliderect(bb_rct):  #当たったら終了
             game_over(screen)
-            time.sleep(5)
+            time.sleep(3)
             return
+        
+        if tmr % 500 == 1:
+            print("hi")
+            ac, vx, vy = accs(ac, vx, vy)
+            r = large(r)
 
         key_lst = pg.key.get_pressed()
         sum_mv = [0, 0] #横、縦
@@ -94,6 +126,7 @@ def main():
             vx *= -1
         if not tate:
             vy *= -1
+
         screen.blit(bb_img, bb_rct)
        
         pg.display.update()
