@@ -1,8 +1,8 @@
 import os
+import pygame as pg
 import random as ran
 import sys
 import time
-import pygame as pg
 
 
 WIDTH, HEIGHT = 1100, 650
@@ -28,12 +28,19 @@ def check_bound(rect: pg.Rect) -> tuple[bool, bool]:
     return yoko, tate
 
 
-def accs(ac, vx, vy):
+def accs(ac, vx, vy) -> list[int,int,int]:
+    """
+    バクダンの速度を変更する関数
+    引数:加速度, 上下速度, 左右速度
+    戻り値:加速度, 上下速度, 左右速度
+    """
+    ac = abs(ac)
     if ac < 11:
         ac += 1
         if vx < 0:
             ac *= -1
         vx += ac
+        ac = abs(ac)
         if vy < 0:
             ac *= -1
         vy += ac
@@ -54,6 +61,10 @@ def large(r):
 
 
 def game_over(screen: pg.Surface):
+    """
+    ゲームオーバー画面を表示させる
+    引数:pg.Surface
+    """
     screen_gameover = pg.Surface((WIDTH, HEIGHT))
     screen_gameover_rct = (0, 0, WIDTH, HEIGHT)
     pg.draw.rect(screen_gameover, (0, 0, 0), screen_gameover_rct)
@@ -70,6 +81,7 @@ def game_over(screen: pg.Surface):
     screen.blit(kk_img_2, [txt_rct[0] - 50, txt_rct[1]])
     screen.blit(kk_img_2, [txt_rct[0] + 460, txt_rct[1]])
     pg.display.update()
+
 
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
