@@ -52,6 +52,9 @@ def main():
                 return
         screen.blit(bg_img, [0, 0]) 
 
+        if kk_rct.colliderect(bb_rct):  #当たったら終了
+            return
+
         key_lst = pg.key.get_pressed()
         sum_mv = [0, 0] #横、縦
         # if key_lst[pg.K_UP]:
@@ -79,6 +82,7 @@ def main():
         if not tate:
             vy *= -1
         screen.blit(bb_img, bb_rct)
+       
         pg.display.update()
         tmr += 1
         clock.tick(50)
